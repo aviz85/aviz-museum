@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הארכיטקט שראה לפני — אביץ ו-Vibe Coding</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700;900&family=Special+Elite&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070711;
+      --bg2: #0c0c1a;
+      --teal: #00F5D4;
+      --teal-dim: rgba(0,245,212,0.12);
+      --teal-glow: rgba(0,245,212,0.35);
+      --gold: #F4B942;
+      --gold-dim: rgba(244,185,66,0.12);
+      --gold-glow: rgba(244,185,66,0.35);
+      --purple: #A78BFA;
+      --purple-dim: rgba(167,139,250,0.12);
+      --text: #e8e4d8;
+      --muted: #6b6880;
+      --paper: #f5f0e8;
+      --paper-dark: #e8e3d4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Frank Ruhl Libre', serif;
+      direction: rtl;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* ── TOP BANNER ── */
+    .top-banner {
+      background: repeating-linear-gradient(
+        -45deg,
+        #1a0a0a 0px, #1a0a0a 10px,
+        #150808 10px, #150808 20px
+      );
+      border-bottom: 2px solid #ff3333;
+      padding: 10px 40px;
+      text-align: center;
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #ff3333;
+      text-transform: uppercase;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,245,212,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 50% 100%, rgba(244,185,66,0.04) 0%, transparent 70%);
+    }
+
+    .hero-eyebrow {
+      font-family: 'Courier Prime', monospace;
+      font-size: 11px;
+      letter-spacing: 5px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      opacity: 0.8;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(60px, 10vw, 120px);
+      line-height: 0.9;
+      text-align: center;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #fff 0%, var(--teal) 50%, #fff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-subtitle {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 300;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 24px;
+      max-width: 700px;
+      line-height: 1.7;
+    }
+
+    .hero-subtitle em {
+      color: var(--text);
+      font-style: normal;
+    }
+
+    .hero-key-quote {
+      margin-top: 60px;
+      max-width: 800px;
+      text-align: center;
+      padding: 40px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-key-quote::before,
+    .hero-key-quote::after {
+      content: '';
+      position: absolute;
+      right: 0; left: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    }
+    .hero-key-quote::before { top: 0; }
+    .hero-key-quote::after { bottom: 0; }
+
+    .hero-key-quote blockquote {
+      font-size: clamp(18px, 2.5vw, 26px);
+      font-weight: 700;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .hero-key-quote cite {
+      display: block;
+      margin-top: 16px;
+      font-size: 13px;
+      font-family: 'Courier Prime', monospace;
+      color: var(--teal);
+      letter-spacing: 2px;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .stat-item {
+      flex: 1;
+      max-width: 240px;
+      padding: 28px 24px;
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: 2px;
+      line-height: 1;
+      color: var(--teal);
+    }
+
+    .stat-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-header {
+      padding: 80px 40px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .phase-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .phase-label.teal { color: var(--teal); }
+    .phase-label.gold { color: var(--gold); }
+    .phase-label.purple { color: var(--purple); }
+
+    .phase-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 5vw, 60px);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .phase-title.teal {
+      color: var(--teal);
+      text-shadow: 0 0 40px var(--teal-glow);
+    }
+
+    .phase-title.gold {
+      color: var(--gold);
+      text-shadow: 0 0 40px var(--gold-glow);
+    }
+
+    .phase-title.purple {
+      color: var(--purple);
+    }
+
+    .phase-desc {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-top: 14px;
+    }
+
+    /* ── TIMELINE WRAPPER ── */
+    .timeline {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      right: 50%;
+      width: 1px;
+      background: linear-gradient(180deg, var(--teal-glow) 0%, rgba(0,245,212,0.1) 100%);
+    }
+
+    .timeline.post-karpathy::before {
+      background: linear-gradient(180deg, var(--gold-glow) 0%, rgba(244,185,66,0.1) 100%);
+    }
+
+    /* ── EVIDENCE CARD ── */
+    .evidence-card {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      gap: 0;
+      margin-bottom: 60px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .evidence-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .evidence-card.right .card-content { grid-column: 1; }
+    .evidence-card.right .card-node { grid-column: 2; }
+    .evidence-card.right .card-spacer { grid-column: 3; }
+
+    .evidence-card.left .card-spacer { grid-column: 1; }
+    .evidence-card.left .card-node { grid-column: 2; }
+    .evidence-card.left .card-content { grid-column: 3; }
+
+    .card-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .node-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--teal);
+      background: var(--bg);
+      box-shadow: 0 0 12px var(--teal-glow);
+      flex-shrink: 0;
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .node-dot.gold {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    .node-dot.purple {
+      border-color: var(--purple);
+      box-shadow: 0 0 8px rgba(167,139,250,0.3);
+    }
+
+    .card-spacer { opacity: 0; }
+
+    /* The actual paper document card */
+    .doc-card {
+      background: var(--paper);
+      color: #1a1a2e;
+      padding: 28px 32px;
+      position: relative;
+      box-shadow:
+        4px 6px 24px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(0,0,0,0.15);
+      transform: rotate(0.3deg);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .doc-card:hover {
+      transform: rotate(0deg) scale(1.01);
+      box-shadow:
+        6px 10px 36px rgba(0,0,0,0.7),
+        0 0 30px var(--teal-glow);
+      cursor: pointer;
+    }
+
+    .doc-card.gold-glow:hover {
+      box-shadow:
+        6px 10px 36px rgba(0,0,0,0.7),
+        0 0 30px var(--gold-glow);
+    }
+
+    .doc-card.purple-glow:hover {
+      box-shadow:
+        6px 10px 36px rgba(0,0,0,0.7),
+        0 0 30px rgba(167,139,250,0.3);
+    }
+
+    /* Torn top edge */
+    .doc-card::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 0; right: 0;
+      height: 7px;
+      background: var(--paper);
+      clip-path: polygon(
+        0% 100%, 2% 0%, 4% 80%, 6% 20%, 8% 90%, 10% 10%,
+        12% 70%, 14% 30%, 16% 85%, 18% 15%, 20% 75%, 22% 25%,
+        24% 90%, 26% 10%, 28% 65%, 30% 35%, 32% 80%, 34% 20%,
+        36% 70%, 38% 30%, 40% 85%, 42% 15%, 44% 60%, 46% 40%,
+        48% 80%, 50% 20%, 52% 75%, 54% 25%, 56% 90%, 58% 10%,
+        60% 70%, 62% 30%, 64% 85%, 66% 15%, 68% 65%, 70% 35%,
+        72% 80%, 74% 20%, 76% 75%, 78% 25%, 80% 85%, 82% 15%,
+        84% 65%, 86% 35%, 88% 80%, 90% 20%, 92% 70%, 94% 30%,
+        96% 85%, 98% 15%, 100% 100%
+      );
+    }
+
+    .doc-card .stamp {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border: 2px solid;
+      padding: 3px 8px;
+      opacity: 0.4;
+      transform: rotate(-8deg);
+    }
+
+    .stamp.teal { color: #007a6a; border-color: #007a6a; }
+    .stamp.gold { color: #8a6200; border-color: #8a6200; }
+    .stamp.purple { color: #5b4a9e; border-color: #5b4a9e; }
+
+    .doc-date {
+      font-family: 'Courier Prime', monospace;
+      font-size: 11px;
+      color: #6b6050;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .doc-quote {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.6;
+      color: #1a1420;
+      margin-bottom: 14px;
+      position: relative;
+      padding-right: 20px;
+    }
+
+    .doc-quote::before {
+      content: '"';
+      position: absolute;
+      right: 0;
+      top: -8px;
+      font-size: 48px;
+      color: rgba(0,0,0,0.08);
+      font-family: 'Bebas Neue', serif;
+      line-height: 1;
+    }
+
+    .doc-note {
+      font-family: 'Courier Prime', monospace;
+      font-size: 11px;
+      color: #7a6a50;
+      border-top: 1px dashed rgba(0,0,0,0.15);
+      padding-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* ── KARPATHY DIVIDER ── */
+    .karpathy-divider {
+      max-width: 1100px;
+      margin: 20px auto 20px;
+      padding: 0 40px;
+      position: relative;
+    }
+
+    .divider-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 40px 0;
+    }
+
+    .divider-badge {
+      position: absolute;
+      top: 50%;
+      right: 50%;
+      transform: translate(50%, -50%);
+      background: var(--bg);
+      border: 2px solid var(--gold);
+      padding: 16px 32px;
+      text-align: center;
+      box-shadow: 0 0 40px var(--gold-glow);
+    }
+
+    .divider-badge-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .divider-badge-date {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .divider-badge-text {
+      font-size: 13px;
+      color: rgba(244,185,66,0.7);
+      margin-top: 4px;
+    }
+
+    /* ── CLOSING ── */
+    .closing {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 100px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .closing::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 50%, rgba(0,245,212,0.04) 0%, transparent 70%);
+    }
+
+    .closing-line1 {
+      font-family: 'Courier Prime', monospace;
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+
+    .closing-main {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.3;
+      max-width: 800px;
+    }
+
+    .closing-main .accent-teal { color: var(--teal); }
+    .closing-main .accent-gold { color: var(--gold); }
+
+    .closing-sub {
+      margin-top: 30px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .back-link {
+      margin-top: 60px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--teal);
+      text-decoration: none;
+      text-transform: uppercase;
+      border: 1px solid rgba(0,245,212,0.3);
+      padding: 12px 28px;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(0,245,212,0.06);
+      border-color: var(--teal);
+      box-shadow: 0 0 20px var(--teal-glow);
+    }
+
+    /* ── ANIMATED BG LINES ── */
+    .scan-lines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.015) 2px,
+        rgba(0,0,0,0.015) 4px
+      );
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .timeline::before { display: none; }
+
+      .evidence-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+
+      .evidence-card.right .card-content,
+      .evidence-card.left .card-content { grid-column: 1; grid-row: 2; }
+      .evidence-card.right .card-node,
+      .evidence-card.left .card-node { grid-column: 1; grid-row: 1; flex-direction: row; justify-content: flex-start; padding-right: 0; }
+      .card-spacer { display: none; }
+
+      .stats-bar { flex-wrap: wrap; }
+      .stat-item { min-width: 50%; border: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+      .divider-badge { position: relative; top: auto; right: auto; transform: none; margin: 0 auto; display: table; }
+      .divider-line { margin: 20px 0; }
+
+      .hero-key-quote { padding: 30px 20px; }
+      .doc-card { transform: rotate(0deg); }
+    }
+
+    /* ── REVEAL ANIMATION ── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero > * {
+      animation: fadeInUp 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    .hero > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero > *:nth-child(2) { animation-delay: 0.3s; }
+    .hero > *:nth-child(3) { animation-delay: 0.5s; }
+    .hero > *:nth-child(4) { animation-delay: 0.7s; }
+
+    /* ── PRE/POST MARKER ── */
+    .before-marker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--teal-dim);
+      border: 1px solid rgba(0,245,212,0.3);
+      padding: 4px 12px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--teal);
+      text-transform: uppercase;
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+    .before-marker::before {
+      content: '◀';
+      font-size: 8px;
+    }
+
+    .after-marker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(244,185,66,0.3);
+      padding: 4px 12px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+
+    .link-icon {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 12px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #7a6a50;
+      gap: 6px;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .doc-card:hover .link-icon { opacity: 1; }
+
+    /* ── SCANNING LINE ANIMATION ── */
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+
+    .hero-scan {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-scan::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0,245,212,0.15), transparent);
+      animation: scan 8s linear infinite;
+    }
+  </style>
+</head>
+<body>
+
+<div class="scan-lines"></div>
+
+<!-- TOP BANNER -->
+<div class="top-banner">
+  תיק ראיות מס׳ 001 — מהפכת הקוד עם AI — ₪ אביץ הארכיטקט
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-scan"></div>
+  <div class="hero-eyebrow">תיעוד היסטורי · 2023–2025</div>
+  <h1 class="hero-title">הארכיטקט<br>שראה לפני</h1>
+  <p class="hero-subtitle">
+    הביטוי <em>Vibe Coding</em> נוצר ע״י אנדריי קרפאתי ב-<em>2 פברואר 2025</em>.
+    אביץ דיבר על זה <em>18 חודש קודם</em>.
+    זהו התיעוד.
+  </p>
+  <div class="hero-key-quote">
+    <blockquote>
+      "עוד לפני שאנדריי קרפאתי כתב על Vibe Coding<br>
+      והתחיל להרעיד עולמות, פימפמתי לכם במוח<br>
+      שמהפכת הקוד כבר כאן"
+    </blockquote>
+    <cite>— אביץ, 17 מרץ 2025</cite>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number">18</div>
+    <div class="stat-label">חודשים לפני קרפאתי</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">197</div>
+    <div class="stat-label">פוסטים על AI-קוד</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">3</div>
+    <div class="stat-label">שלבים מתועדים</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">2023</div>
+    <div class="stat-label">תחילת המסע</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PHASE 1: הזרע -->
+<!-- ══════════════════════════════════ -->
+<div class="section-header">
+  <div class="phase-label teal">שלב א׳ · יולי 2023</div>
+  <h2 class="phase-title teal">הזרע</h2>
+  <p class="phase-desc">שנה וחצי לפני שהמונח הגיע לעולם — הרעיון נשתל כאן.</p>
+</div>
+
+<div class="timeline">
+  <!-- Post 1: Jul 2023 -->
+  <div class="evidence-card right reveal">
+    <div class="card-content">
+      <div class="doc-card" onclick="openFB('אפליקציה מפרומפט WizardCoder קוד')">
+        <span class="stamp teal">לפני קרפאתי</span>
+        <div class="before-marker">18 חודש מוקדם</div>
+        <div class="doc-date">11.07.2023 · ts=1689027395</div>
+        <div class="doc-quote">
+          "בואו תכינו לעצמכם אפליקציה מפרומפט!!!"
+        </div>
+        <div class="doc-note">
+          ◈ WizardCoder מצליח לכתוב קוד לאפליקציות דפדפן קטנות — הרעיון כבר חי. אפשר לבנות מפרומפט. 18 חודש לפני שמישהו נתן לזה שם.
+        </div>
+        <div class="link-icon">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+    <div class="card-node">
+      <div class="node-dot"></div>
+    </div>
+    <div class="card-spacer"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PHASE 2: ריילי בראון -->
+<!-- ══════════════════════════════════ -->
+<div class="section-header">
+  <div class="phase-label teal">שלב ב׳ · ספטמבר–נובמבר 2024</div>
+  <h2 class="phase-title teal">קוד כחוויה יצירתית</h2>
+  <p class="phase-desc">ריילי בראון מגלה את כוח ״קוד עם קלוד״ — אביץ מפמפם את זה לכולם.</p>
+</div>
+
+<div class="timeline">
+  <!-- Post 2: Sep 2024 -->
+  <div class="evidence-card left reveal">
+    <div class="card-spacer"></div>
+    <div class="card-node">
+      <div class="node-dot"></div>
+    </div>
+    <div class="card-content">
+      <div class="doc-card" onclick="openFB('ריילי בראון קוד חוויה יצירתית אינטואיטיבית')">
+        <span class="stamp teal">לפני קרפאתי</span>
+        <div class="before-marker">5 חודשים מוקדם</div>
+        <div class="doc-date">02.09.2024 · ts=1725270452</div>
+        <div class="doc-quote">
+          "ריילי בראון מזמין אותנו להסתכל מחדש על קוד כחוויה יצירתית ואינטואיטיבית"
+        </div>
+        <div class="doc-note">
+          ◈ ההגדרה שתגיע מאוחר יותר מקרפאתי — כבר כאן. "קוד כחוויה יצירתית ואינטואיטיבית" = vibe coding.
+        </div>
+        <div class="link-icon">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post 3: Nov 10 2024 -->
+  <div class="evidence-card right reveal">
+    <div class="card-content">
+      <div class="doc-card" onclick="openFB('מהפכת הקוד ידועה למעטים ריילי קלוד')">
+        <span class="stamp teal">לפני קרפאתי</span>
+        <div class="before-marker">3 חודשים מוקדם</div>
+        <div class="doc-date">10.11.2024 · ts=1731192582</div>
+        <div class="doc-quote">
+          "מהפכת הקוד (זו שאני מתעקש עליה כבר כמה חודשים) עדיין ידועה למעטים. קלוד 3.5 שינה את המפה. אפילו סאם אלטמן עצמו כנראה לא מודע לאפשרות של פיתוח אפליקציות מלאות ללא ידע בקוד."
+        </div>
+        <div class="doc-note">
+          ◈ "זו שאני מתעקש עליה כבר כמה חודשים" — הוא כותב את זה בנובמבר 2024. הוא מתעקש על זה כבר חודשים. סאם אלטמן עצמו עוד לא שם.
+        </div>
+        <div class="link-icon">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+    <div class="card-node">
+      <div class="node-dot"></div>
+    </div>
+    <div class="card-spacer"></div>
+  </div>
+
+  <!-- Post 4: Nov 14 2024 -->
+  <div class="evidence-card left reveal">
+    <div class="card-spacer"></div>
+    <div class="card-node">
+      <div class="node-dot"></div>
+    </div>
+    <div class="card-content">
+      <div class="doc-card" onclick="openFB('זהב טהור ריילי בראון קוד קלוד אובססיבי')">
+        <span class="stamp teal">לפני קרפאתי</span>
+        <div class="before-marker">2.5 חודשים מוקדם</div>
+        <div class="doc-date">14.11.2024 · ts=1731538671</div>
+        <div class="doc-quote">
+          "ריילי בראון... מאז שהוא גילה את כח הקוד (׳קוד עם קלוד׳) הוא פשוט אובססיבי רק לזה — ולמרות שלא כתב קוד מימיו הוא נחוש להפוך למפתח אמיתי ברמת סניור תוך זמן קצר"
+        </div>
+        <div class="doc-note">
+          ◈ "קוד עם קלוד" — המינוח של אביץ עצמו. זה בדיוק מה שקרפאתי יקרא "vibe coding" שלושה חודשים אחר כך.
+        </div>
+        <div class="link-icon">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post 5: Nov 28 2024 -->
+  <div class="evidence-card right reveal">
+    <div class="card-content">
+      <div class="doc-card" onclick="openFB('מהפכת הקוד AI מי נגד מי Bolt Cursor Windsurf')">
+        <span class="stamp teal">לפני קרפאתי</span>
+        <div class="before-marker">2 חודשים מוקדם</div>
+        <div class="doc-date">28.11.2024 · ts=1732746734</div>
+        <div class="doc-quote">
+          "מהפכת הקוד עם AI — מי נגד מי?! כל כך הרבה כלים לפיתוח קוד יצאו בחודשים האחרונים... Bolt, Cursor, Cline, Replit, Windsurf, Copilot"
+        </div>
+        <div class="doc-note">
+          ◈ ניתוח מקיף ראשון של מפת הכלים — עוד לפני שהמונח "vibe coding" קיים. אביץ כבר ממפה את האקו-סיסטם.
+        </div>
+        <div class="link-icon">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+    <div class="card-node">
+      <div class="node-dot"></div>
+    </div>
+    <div class="card-spacer"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- KARPATHY DIVIDER -->
+<!-- ══════════════════════════════════ -->
+<div class="karpathy-divider">
+  <div class="divider-line"></div>
+  <div class="divider-badge">
+    <div class="divider-badge-label">אירוע מכונן</div>
+    <div class="divider-badge-date">2 פברואר 2025</div>
+    <div class="divider-badge-text">קרפאתי מטבע את המונח "Vibe Coding"</div>
+  </div>
+  <div class="divider-line"></div>
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- PHASE 3: POST KARPATHY -->
+<!-- ══════════════════════════════════ -->
+<div class="section-header">
+  <div class="phase-label gold">שלב ג׳ · פברואר–אפריל 2025</div>
+  <h2 class="phase-title gold">המונח הגיע — אביץ כבר שם</h2>
+  <p class="phase-desc">הניואנס: הוא לא "קפץ על הטרנד" — הטרנד קפץ עליו.</p>
+</div>
+
+<div class="timeline post-karpathy">
+  <!-- Post 6: Feb 6 2025 -->
+  <div class="evidence-card left reveal">
+    <div class="card-spacer"></div>
+    <div class="card-node">
+      <div class="node-dot gold"></div>
+    </div>
+    <div class="card-content">
+      <div class="doc-card gold-glow" onclick="openFB('מתכנתים לפתח קוד בלי לכתוב קוד vibe coding ריילי')">
+        <span class="stamp gold">4 ימים אחרי קרפאתי</span>
+        <div class="after-marker">06.02.2025</div>
+        <div class="doc-date">06.02.2025 · ts=1738811015</div>
+        <div class="doc-quote">
+          "יש מעט מידי מתכנתים שמאמינים שאפשר לפתח קוד בלי לכתוב קוד בכלל... מאז שיצא קלוד 3.5 סונט זה הפך למעשי... אנדריי קרפאת׳י מתאר את החוויה בתור סוג של פיתוח קוד אבל מזן אחר: vibe coding. ריילי בראון המלך."
+        </div>
+        <div class="doc-note">
+          ◈ שימוש ראשון במונח "vibe coding" בפוסטים — 4 ימים בלבד אחרי שקרפאתי הטביע אותו. כבר מסביר שזה מה שהוא דיבר עליו כל הזמן.
+        </div>
+        <div class="link-icon">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post 7: Feb 28 2025 -->
+  <div class="evidence-card right reveal">
+    <div class="card-content">
+      <div class="doc-card gold-glow" onclick="openFB('קלוד 3.7 פינג פונג קורסור Claude Code')">
+        <span class="stamp gold">פברואר 2025</span>
+        <div class="after-marker">28.02.2025</div>
+        <div class="doc-date">28.02.2025 · ts=1740739188</div>
+        <div class="doc-quote">
+          "כשקלוד 3.5 שוחרר — ישבתי עליו שעות ופיתחתי אפליקציית פולסטאק מורכבת... זה הרגיש כמו פינג-פונג מוזר כזה... ואז הגיע קורסור, שבגדול חסך את כל סאגת ההעתק-הדבק."
+        </div>
+        <div class="doc-note">
+          ◈ מתאר את האבולוציה שחי בעצמו — מ״פינג פונג״ עם קלוד, דרך קורסור, עד לקלוד 3.7 ו-Claude Code.
+        </div>
+        <div class="link-icon">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+    <div class="card-node">
+      <div class="node-dot gold"></div>
+    </div>
+    <div class="card-spacer"></div>
+  </div>
+
+  <!-- Post 8: Mar 17 2025 — THE KEY POST -->
+  <div class="evidence-card left reveal">
+    <div class="card-spacer"></div>
+    <div class="card-node">
+      <div class="node-dot purple"></div>
+    </div>
+    <div class="card-content">
+      <div class="doc-card purple-glow" style="background: #f8f4fc;" onclick="openFB('לפני קרפאתי Vibe Coding פימפמתי מהפכת הקוד')">
+        <span class="stamp purple">הפוסט המכונן</span>
+        <div class="doc-date" style="color:#6b5070">17.03.2025 · ts=1742242127</div>
+        <div class="doc-quote" style="color:#1a0a2e; font-size:20px">
+          "עוד לפני שאנדריי קרפאתי כתב על Vibe Coding והתחיל להרעיד עולמות, פימפמתי לכם במוח שמהפכת הקוד כבר כאן וזה האימפקט הכי גדול ש-AI עושה על השוק נכון להיום..."
+        </div>
+        <div class="doc-note" style="color:#7a5090">
+          ◈ אביץ עצמו מאשר: הוא היה לפני קרפאתי. לא קפץ על הטרנד — הטרנד הגיע אליו.
+        </div>
+        <div class="link-icon" style="color: #9a70b0">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post 9: Apr 4 2025 -->
+  <div class="evidence-card right reveal">
+    <div class="card-content">
+      <div class="doc-card gold-glow" onclick="openFB('לגזור לשמור קרפאתי וייב קודינג הביטוי')">
+        <span class="stamp gold">אפריל 2025</span>
+        <div class="after-marker">04.04.2025</div>
+        <div class="doc-date">04.04.2025 · ts=1743758588</div>
+        <div class="doc-quote">
+          "לגזור ולשמור — הפוסט המקורי של אנדריי קרפאתי שהביא את הביטוי וייב קודינג לעולם"
+        </div>
+        <div class="doc-note">
+          ◈ הוא שומר את הפוסט של קרפאתי — אבל הוא כבר מכיר את הרעיון מ-2023. הוא מתעד את ״הרגע שהעולם תפס.״
+        </div>
+        <div class="link-icon">⎋ לחץ לפתיחה בפייסבוק</div>
+      </div>
+    </div>
+    <div class="card-node">
+      <div class="node-dot gold"></div>
+    </div>
+    <div class="card-spacer"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════ -->
+<!-- CLOSING -->
+<!-- ══════════════════════════════════ -->
+<section class="closing">
+  <div class="closing-line1">סיכום הראיות</div>
+  <div class="closing-main">
+    <span class="accent-teal">המונח הגיע בפברואר 2025.</span><br>
+    <span class="accent-gold">הרעיון חי כאן מ-2023.</span>
+  </div>
+  <div class="closing-sub">
+    197 פוסטים · ריילי בראון · קוד עם קלוד · מהפכת הקוד<br>
+    — כולם חיים בפיד הזה לפני שהם קיבלו שם
+  </div>
+  <a href="index.html" class="back-link">← חזרה למוזיאון</a>
+</section>
+
+
+<script>
+  // ── INTERSECTION OBSERVER ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── FACEBOOK SEARCH OPENER ──
+  const AUTHOR_ME_FILTER = 'eyJycF9hdXRob3I6MCI6IntcIm5hbWVcIjpcImF1dGhvcl9tZVwiLFwiYXJnc1wiOlwiXCJ9In0%3D';
+
+  function openFB(query) {
+    const encoded = encodeURIComponent(query);
+    const url = `https://www.facebook.com/search/top?q=${encoded}&filters=${AUTHOR_ME_FILTER}`;
+    window.open(url, '_blank', 'noopener');
+  }
+</script>
+
+</body>
+</html>
