@@ -1,0 +1,55 @@
+{
+  "_note": "Facebook post timestamps → labels. Source: Drive export your_posts__check_ins__photos_and_videos_1.json. To find direct URL use fb-post-finder agent with the preview text.",
+  "_drive_file_ids": {
+    "posts_1": "1UhV7m_BqrJhwqB4pX7AP6O5RTuEYZiIa",
+    "posts_2": "1sUTww32wOGBtKp7AP6O5RTuEYZiIa",
+    "posts_3": "14N0MNUSCMGGXYZG-5_bYtKMUpFcVBWMm"
+  },
+  "_encoding": "Facebook export JSON is latin-1 encoded. To read Hebrew: s.encode('latin-1').decode('utf-8').encode('latin-1').decode('utf-8')",
+  "landmark_posts": [
+    {
+      "ts": 1419993120,
+      "date": "2014-12-31 04:32",
+      "tag": "memoir_2014",
+      "label": "הסיפור שלי — 18,375 תווים, מניפסט חיים מלא",
+      "preview": "הסיפור שלי:\nאני אדם חכם...",
+      "search_query": "הסיפור שלי אני אדם חכם",
+      "contains": ["רוטשילד", "תשעה באב", "היפומאניה", "גיל 17"]
+    },
+    {
+      "ts": 1436427188,
+      "date": "2015-07-09 10:33",
+      "tag": "crisis_2015",
+      "label": "שתי חתונות יותר מדי — משבר העסק 2015",
+      "preview": "שתי חתונות יותר מדי - רצף הכשלים שהובילו את אולפני אביץ לכמעט אבדון",
+      "search_query": "שתי חתונות יותר מדי אולפני אביץ",
+      "context": "עסק עריכת וידאו, חובות, מילואים, קריסה"
+    },
+    {
+      "ts": 1312926731,
+      "date": "2011-08-10 00:52",
+      "tag": "rothschild_tisha_bav_eve",
+      "label": "ערב תשעה באב תשע״א — ברוטשילד",
+      "preview": "הרב יעקב אריאל, הרב יובל שרלו... יש ליטול חלק במאבק ברוטשילד",
+      "search_query": "הרב יעקב אריאל הרב יובל שרלו ברוטשילד",
+      "context": "Tisha B'Av 2011 = Aug 9, 2011. He stopped meds on this day."
+    },
+    {
+      "ts": 1313002111,
+      "date": "2011-08-10 21:48",
+      "tag": "rothschild_tisha_bav_day",
+      "label": "תשעה באב עצמו ברוטשילד",
+      "preview": "שיח לאומי שכמותו לא ראתה ההיסטוריה! עכשיו ברוטשילד!",
+      "search_query": "שיח לאומי שכמותו לא ראתה ההיסטוריה ברוטשילד",
+      "context": "Posted ON Tisha B'Av night (after fast) from Rothschild Blvd"
+    },
+    {
+      "ts": 1314669603,
+      "date": "2011-08-30 05:00",
+      "tag": "rothschild_dafni_leef",
+      "label": "פגישה עם דפני ליף ברוטשילד, 4:30 לפנות בוקר",
+      "preview": "לדפני ליף, אני מבקש סליחה על שדנתי אותך לכף חובה... פגשתי אותה כאן ברוטשילד, 4:30 לפנות בוקר",
+      "search_query": "לדפני ליף אני מבקש סליחה פגשתי אותה ברוטשילד"
+    }
+  ]
+}

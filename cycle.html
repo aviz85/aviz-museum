@@ -1177,7 +1177,7 @@
     if (!textEl) return;
     const raw = textEl.innerText.replace(/[""״]/g, '').trim();
     const words = raw.split(/\s+/).slice(0, 6).join(' ');
-    const url = 'https://www.facebook.com/search/posts/?q=' + encodeURIComponent(words);
+    const url = 'https://www.facebook.com/AYMaeir/search/?q=' + encodeURIComponent(words);
     card.style.cursor = 'pointer';
     card.addEventListener('click', () => window.open(url, '_blank', 'noopener'));
   });
