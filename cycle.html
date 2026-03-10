@@ -1177,7 +1177,7 @@
     if (!textEl) return;
     const raw = textEl.innerText.replace(/[""״]/g, '').trim();
     const words = raw.split(/\s+/).slice(0, 6).join(' ');
-    const url = 'https://www.facebook.com/AYMaeir/search/?q=' + encodeURIComponent(words);
+    const url = 'https://www.facebook.com/search/top?q=' + encodeURIComponent(words) + '&filters=eyJycF9hdXRob3I6MCI6IntcIm5hbWVcIjpcImF1dGhvcl9tZVwiLFwiYXJnc1wiOlwiXCJ9In0%3D';
     card.style.cursor = 'pointer';
     card.addEventListener('click', () => window.open(url, '_blank', 'noopener'));
   });

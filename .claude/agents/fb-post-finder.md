@@ -60,18 +60,23 @@ You receive a quote text (Hebrew) and optionally a date (e.g. "אוגוסט 2010
 ### Step 1: Build search query
 Take the first 5-7 meaningful Hebrew words from the quote (skip punctuation, quotation marks).
 
-### Step 2: Open Facebook profile search — AVIZ's posts ONLY
-**CRITICAL: Must filter to only Aviz's own posts, not other people's.**
+### Step 2: Open Facebook search — AVIZ's posts ONLY with author_me filter
+**CRITICAL: Must filter to ONLY Aviz's own posts — not friends, not shared posts, not pages.**
 
-Navigate to Aviz's profile-scoped search:
+Use the `author_me` filter URL:
 ```
-https://www.facebook.com/AYMaeir/search/?q=ENCODED_QUERY
+https://www.facebook.com/search/top?q=ENCODED_QUERY&filters=eyJycF9hdXRob3I6MCI6IntcIm5hbWVcIjpcImF1dGhvcl9tZVwiLFwiYXJnc1wiOlwiXCJ9In0%3D
 ```
-This searches ONLY within Aviz's profile (AYMaeir = his profile name).
-URL-encode the Hebrew query words.
+
+The filter `eyJycF9hdXRob3I6MCI6IntcIm5hbWVcIjpcImF1dGhvcl9tZVwiLFwiYXJnc1wiOlwiXCJ9In0%3D` decodes to:
+`{"rp_author:0":"{\"name\":\"author_me\",\"args\":\"\"}"}` — shows ONLY posts written by the logged-in user (Aviz).
+
+URL-encode the Hebrew query words for the `q=` parameter.
+
+**DO NOT use `https://www.facebook.com/AYMaeir/search/` — that returns results from all users.**
 
 ### Step 3: Wait and read results
-After navigating, wait 2-3 seconds, then read the page. Verify all results shown are by "אברהם יצחק מאיר".
+After navigating, wait 2-3 seconds, then read the page.
 
 ### Step 4: Find the matching post
 - Check the first result — confirm it contains key phrases from the quote
@@ -87,14 +92,15 @@ return links.map(a => a.href).filter(h => h.includes('AYMaeir') || h.includes('s
 
 ### Step 6: Verify post is by Aviz
 **MANDATORY:** Confirm the post author is Aviz before returning URL.
+- The `author_me` filter should ensure this, but double-check
 - Check: "Avraham Yitzchak Maeir" or "אברהם יצחק מאיר" appears as the post author
 - If a result is by someone else — skip it, scroll down to find next
 
 ### Step 7: Return result
 - Match confirmed: `FOUND: <URL>`
 - Match uncertain: `BEST_GUESS: <URL>`
-- No results on profile: try global search `https://www.facebook.com/search/posts/?q=ENCODED_QUERY` then manually verify author before returning
-- No match at all: `NOT_FOUND: https://www.facebook.com/AYMaeir/search/?q=ENCODED_QUERY`
+- No results: try with 3-4 words instead of 5-7, retry once
+- No match at all: `NOT_FOUND`
 
 ## Output format
 ```
@@ -106,8 +112,7 @@ QUOTE_MATCH: <the matching text fragment seen on page>
 ```
 
 ## Important notes
-- **Always search AYMaeir's profile first** — never return results from other people's posts
+- **Always use the author_me filter** — this is the only reliable way to restrict to Aviz's posts
 - Always open in a new tab — don't disturb existing tabs
 - If Facebook asks for login, stop and return NOT_FOUND
-- If profile search shows no results, try with 3-4 words instead of 5-6
 - Never retry more than 2 search attempts
