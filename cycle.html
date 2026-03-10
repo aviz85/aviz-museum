@@ -1172,12 +1172,28 @@
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
   // ── FACEBOOK QUOTE LINKS ──
+  // Verified direct permalinks for landmark posts
+  const KNOWN_LINKS = {
+    // Dec 31, 2014 memoir post — both cycle_2 and cycle_7
+    'מה שאני מתחיל להבין על עצמי': 'https://www.facebook.com/AYMaeir/posts/pfbid0m1RcFr1k5FxeoR5vd4Z9nbFDy957HRG1Z5rhP1849KpUqzzMo5jEcakJ2ejM9hz9l',
+    'אני אדם חכם. זו אמנם': 'https://www.facebook.com/AYMaeir/posts/pfbid0m1RcFr1k5FxeoR5vd4Z9nbFDy957HRG1Z5rhP1849KpUqzzMo5jEcakJ2ejM9hz9l',
+    // April 2023 — introducing Claude
+    'בא לשכונה בחור חדש': 'https://www.facebook.com/AYMaeir/posts/pfbid0q3nmkmg6MXm8u9YGBzHGwSScJWWDgeoNkrBWmzBDefSrtyBtiR1M2Uyw7kBXqqYhl',
+  };
   document.querySelectorAll('.quote-card').forEach(card => {
     const textEl = card.querySelector('.quote-text');
     if (!textEl) return;
     const raw = textEl.innerText.replace(/[""״]/g, '').trim();
-    const words = raw.split(/\s+/).slice(0, 6).join(' ');
-    const url = 'https://www.facebook.com/search/top?q=' + encodeURIComponent(words) + '&filters=eyJycF9hdXRob3I6MCI6IntcIm5hbWVcIjpcImF1dGhvcl9tZVwiLFwiYXJnc1wiOlwiXCJ9In0%3D';
+    // Check known links first
+    let url = null;
+    for (const [key, link] of Object.entries(KNOWN_LINKS)) {
+      if (raw.includes(key)) { url = link; break; }
+    }
+    // Fallback: author_me filtered search
+    if (!url) {
+      const words = raw.split(/\s+/).slice(0, 6).join(' ');
+      url = 'https://www.facebook.com/search/top?q=' + encodeURIComponent(words) + '&filters=eyJycF9hdXRob3I6MCI6IntcIm5hbWVcIjpcImF1dGhvcl9tZVwiLFwiYXJnc1wiOlwiXCJ9In0%3D';
+    }
     card.style.cursor = 'pointer';
     card.addEventListener('click', () => window.open(url, '_blank', 'noopener'));
   });
