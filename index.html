@@ -55,6 +55,276 @@
     ::-webkit-scrollbar-track { background: var(--darker); }
     ::-webkit-scrollbar-thumb { background: #3a3020; border-radius: 2px; }
 
+    /* ══════════════════════════════
+       RESEARCH FINDINGS
+    ══════════════════════════════ */
+    #research-findings {
+      padding: 120px 5vw 100px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .rf-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .rf-eyebrow {
+      display: inline-block;
+      font-family: var(--font-latin);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .rf-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .rf-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .rf-finding {
+      background: linear-gradient(135deg, rgba(0,180,216,0.05) 0%, rgba(123,45,139,0.05) 100%);
+      border: 1px solid rgba(0,180,216,0.15);
+      border-radius: 2px;
+      padding: 50px;
+      margin-bottom: 70px;
+      position: relative;
+    }
+
+    .rf-finding::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(to bottom, #00B4D8, #7B2D8B);
+    }
+
+    .rf-finding-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #00B4D8;
+      margin-bottom: 16px;
+    }
+
+    .rf-finding-title {
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+
+    .rf-finding-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: rgba(232,223,200,0.85);
+      margin-bottom: 16px;
+    }
+
+    .rf-stat-highlight {
+      margin-top: 30px;
+      padding: 20px 24px;
+      background: rgba(0,180,216,0.08);
+      border-right: 3px solid #00B4D8;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .rf-stat-highlight span {
+      color: #00B4D8;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 6px;
+    }
+
+    .rf-constants {
+      margin-bottom: 70px;
+    }
+
+    .rf-constants-title {
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--text-dim);
+      margin-bottom: 30px;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    .rf-constants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .rf-constant {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.3s;
+    }
+
+    .rf-constant:hover { border-color: rgba(255,255,255,0.12); }
+
+    .rf-const-icon {
+      font-size: 1rem;
+      color: #D4760A;
+      font-weight: 700;
+    }
+
+    .rf-const-text {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .rf-formula {
+      margin-bottom: 70px;
+      text-align: center;
+    }
+
+    .rf-formula-inner {
+      display: inline-block;
+      padding: 60px 80px;
+      border: 1px solid rgba(212,118,10,0.2);
+      position: relative;
+    }
+
+    .rf-formula-inner::before, .rf-formula-inner::after {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      border-color: #D4760A;
+      border-style: solid;
+    }
+
+    .rf-formula-inner::before { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+    .rf-formula-inner::after  { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+
+    .rf-formula-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #D4760A;
+      margin-bottom: 20px;
+    }
+
+    .rf-formula-text {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .rf-formula-sub {
+      font-size: 1rem;
+      color: var(--text-dim);
+      font-style: italic;
+      line-height: 1.7;
+      max-width: 500px;
+    }
+
+    .rf-formula-sub em { color: var(--text); font-style: normal; font-weight: 500; }
+
+    .rf-arc { margin-bottom: 70px; text-align: center; }
+
+    .rf-arc-title {
+      font-size: 1.2rem;
+      font-weight: 300;
+      color: var(--text-dim);
+      margin-bottom: 40px;
+    }
+
+    .rf-arc-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 700px;
+      margin: 0 auto 20px;
+    }
+
+    .rf-arc-point {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-width: 80px;
+    }
+
+    .rf-arc-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: rgba(232,223,200,0.3);
+      border: 2px solid rgba(232,223,200,0.5);
+    }
+
+    .rf-arc-dot-peak {
+      width: 18px; height: 18px;
+      background: #D4760A;
+      border-color: #D4760A;
+      box-shadow: 0 0 15px rgba(212,118,10,0.5);
+    }
+
+    .rf-arc-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to left, rgba(212,118,10,0.5), rgba(232,223,200,0.15));
+    }
+
+    .rf-arc-year { font-size: 0.75rem; color: var(--text-dim); }
+    .rf-arc-val  { font-size: 1.1rem; color: var(--text); font-weight: 500; }
+
+    .rf-arc-caption {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      font-style: italic;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .rf-quote { text-align: center; padding: 60px 40px; position: relative; }
+
+    .rf-quote::before {
+      content: '"';
+      position: absolute;
+      top: 10px; right: 50%;
+      transform: translateX(50%);
+      font-size: 8rem;
+      color: rgba(212,118,10,0.08);
+      font-family: Georgia, serif;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .rf-quote blockquote {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-style: italic;
+      color: rgba(232,223,200,0.8);
+      line-height: 1.9;
+      max-width: 750px;
+      margin: 0 auto 20px;
+    }
+
+    .rf-quote cite {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+
     /* ══════════════════════════════════
        HERO
     ══════════════════════════════════ */
@@ -1185,8 +1455,106 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════ CLOSING ══════════════════════════════ -->
+  <!-- ══════════════════════════════ RESEARCH FINDINGS ══════════════════════════════ -->
   <div class="timeline-connector" style="--era-color-from: #00B4D8; --era-color-to: transparent;"></div>
+
+  <section id="research-findings">
+    <div class="rf-header reveal">
+      <span class="rf-eyebrow">7 סוכני מחקר · 16,843 פוסטים · מרץ 2026</span>
+      <h2 class="rf-title">מה שנגלה רק מהמבט הכולל</h2>
+      <p class="rf-subtitle">ממצאים שאף קורא בודד לא יכול היה לראות</p>
+    </div>
+
+    <!-- Hidden Finding -->
+    <div class="rf-finding rf-main reveal">
+      <div class="rf-finding-label">הנקודה הסמויה</div>
+      <h3 class="rf-finding-title">AI לא נכנס כנושא — הוא נכנס כפתרון</h3>
+      <p class="rf-finding-text">
+        17 שנה של מאבק עם אותה סתירה: ראיית-הכל מול חוסר-יכולת-לסיים. בין החזון לתוצר — ה-ADHD. "ערימה מפוארת של כשלונות שמסתכמת לדבר אחד פשוט: חוסר אמון בעצמי שאני יכול לסיים." — 2015.
+      </p>
+      <p class="rf-finding-text">
+        Claude לקח את ה-middle. לראשונה בחייו, הפער בין החזון למציאות נסגר — לא על ידי שינוי עצמי, אלא על ידי שיתוף-פעולה עם כלי שמשלים בדיוק את מה שחסר.
+      </p>
+      <div class="rf-stat-highlight">
+        פוסטים ארוכים (+3,000 תווים) עלו <span>1,200%</span> מאז Claude
+      </div>
+    </div>
+
+    <!-- Constants Grid -->
+    <div class="rf-constants reveal reveal-delay-1">
+      <h3 class="rf-constants-title">הקבועים — מה שלא השתנה ב-17 שנה</h3>
+      <div class="rf-constants-grid">
+        <div class="rf-constant">
+          <div class="rf-const-icon">שבת</div>
+          <div class="rf-const-text">אפס פוסטים בשעות היום בכל 17 השנים</div>
+        </div>
+        <div class="rf-constant">
+          <div class="rf-const-icon">אז הנה</div>
+          <div class="rf-const-text">173 פעמים — הרגע המעבר מהקדמה לאמת</div>
+        </div>
+        <div class="rf-constant">
+          <div class="rf-const-icon">לילה טוב</div>
+          <div class="rf-const-text">סיום קבוע מ-2013 ועד 2025 — "מאובן לשוני באדמה שהשתנתה"</div>
+        </div>
+        <div class="rf-constant">
+          <div class="rf-const-icon">65%</div>
+          <div class="rf-const-text">מסמני אי-וודאות — יחס קבוע בכל 6 התקופות</div>
+        </div>
+        <div class="rf-constant">
+          <div class="rf-const-icon">19.7%</div>
+          <div class="rf-const-text">פוסטים בין חצות ל-5 בבוקר — תנאי קוגניטיבי קבוע</div>
+        </div>
+        <div class="rf-constant">
+          <div class="rf-const-icon">תורה</div>
+          <div class="rf-const-text">מבנה הגמרא: קושיא → נגדא → ולכן — בכל פוסט שהבשיל</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The Formula -->
+    <div class="rf-formula reveal reveal-delay-2">
+      <div class="rf-formula-inner">
+        <div class="rf-formula-label">הנוסחה</div>
+        <p class="rf-formula-text">אחדות הפענוח והמסירה</p>
+        <p class="rf-formula-sub">הוא לא מבין ואז מלמד — הוא מבין <em>תוך כדי</em> מלמד.<br>16,843 הפוסטים הם לא יומן — הם המחשבה עצמה.</p>
+      </div>
+    </div>
+
+    <!-- The Em-Dash Arc -->
+    <div class="rf-arc reveal">
+      <h3 class="rf-arc-title">קשת הבגרות — סימן המקף</h3>
+      <div class="rf-arc-bar">
+        <div class="rf-arc-point" style="--pct: 2%">
+          <div class="rf-arc-dot"></div>
+          <div class="rf-arc-year">עד 2022</div>
+          <div class="rf-arc-val">0 / 1k</div>
+        </div>
+        <div class="rf-arc-line"></div>
+        <div class="rf-arc-point" style="--pct: 55%">
+          <div class="rf-arc-dot"></div>
+          <div class="rf-arc-year">2025</div>
+          <div class="rf-arc-val">255 / 1k</div>
+        </div>
+        <div class="rf-arc-line"></div>
+        <div class="rf-arc-point" style="--pct: 100%">
+          <div class="rf-arc-dot rf-arc-dot-peak"></div>
+          <div class="rf-arc-year">2026</div>
+          <div class="rf-arc-val">452 / 1k</div>
+        </div>
+      </div>
+      <p class="rf-arc-caption">em-dash מגיע עם בגרות אינטלקטואלית — סמל של מי שיודע שהוא כותב ויודע שנקרא</p>
+    </div>
+
+    <!-- Closing Quote of Research -->
+    <div class="rf-quote reveal reveal-delay-1">
+      <blockquote>
+        "אני לא אדם שמתמחה בציטוטים אלא מתבונן בדברים ובסופו של דבר אומר מה שנראה לי הכי אמיתי והכי מאומת, ולרוב זה מגיע אחרי מחשבות עמוקות בטווח של שנים."
+      </blockquote>
+      <cite>— פברואר 2026 · "סינגולריות"</cite>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ CLOSING ══════════════════════════════ -->
 
   <section id="closing">
     <h2 class="closing-quote reveal">
