@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>המחזור — תיעוד מלא עם ראיות | יומני אביץ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+Hebrew:wght@200;300;400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #07070f;
+      --bg2: #0d0d1a;
+      --text: #e8dfc8;
+      --text-dim: #9a8f7a;
+      --text-faint: #4a4535;
+      --font-heb: 'Frank Ruhl Libre', 'Noto Serif Hebrew', serif;
+      --font-lat: 'Cormorant Garamond', Georgia, serif;
+
+      --hypo: #c8822a;    /* היפומניה */
+      --peak: #e8c547;    /* שיא */
+      --crash: #5a3fa0;   /* קריסה */
+      --analytic: #2a7a8f; /* כתיבה אנליטית */
+      --next: #3d8f5a;    /* גל הבא */
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-heb);
+      direction: rtl;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* grain */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.028; pointer-events: none; z-index: 9999;
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #2a2518; border-radius: 2px; }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      position: fixed; top: 24px; right: 24px; z-index: 100;
+      font-family: var(--font-lat);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 0.15em;
+      border-bottom: 1px solid rgba(154,143,122,0.3);
+      padding-bottom: 2px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .back-link:hover { color: var(--text); border-color: var(--text-dim); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 5vw 60px;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 30% 40%, rgba(200,130,42,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(90,63,160,0.07) 0%, transparent 55%);
+    }
+
+    .hero-label {
+      font-family: var(--font-lat);
+      font-size: 0.78rem;
+      letter-spacing: 0.3em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 7vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-arrow {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; flex-wrap: wrap;
+      margin: 32px 0 20px;
+      font-size: clamp(0.85rem, 2vw, 1.1rem);
+    }
+
+    .phase-chip {
+      padding: 6px 16px;
+      border-radius: 2px;
+      font-family: var(--font-heb);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .chip-arrow {
+      color: var(--text-faint);
+      font-size: 1.2rem;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      font-style: italic;
+      margin-top: 20px;
+    }
+
+    .hero-data {
+      display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;
+      margin-top: 40px;
+    }
+
+    .hero-stat { text-align: center; }
+    .hero-stat-num {
+      font-size: 2rem; font-weight: 300;
+      color: var(--text);
+      display: block;
+    }
+    .hero-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+
+    .scroll-hint {
+      margin-top: 50px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      color: var(--text-faint);
+      font-size: 0.8rem;
+    }
+    .scroll-dot {
+      width: 1px; height: 60px;
+      background: linear-gradient(to bottom, var(--text-faint), transparent);
+    }
+
+    /* ── MAIN CONTENT ── */
+    main { max-width: 900px; margin: 0 auto; padding: 0 5vw 120px; }
+
+    /* ── SECTION INTRO ── */
+    .section-intro {
+      padding: 80px 0 40px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-lat);
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .section-body {
+      font-size: 1.05rem;
+      color: rgba(232,223,200,0.85);
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+
+    /* ── PHASE HEADER ── */
+    .phase-header {
+      display: flex; align-items: flex-start; gap: 24px;
+      padding: 60px 0 30px;
+    }
+
+    .phase-num {
+      font-family: var(--font-lat);
+      font-size: 5rem;
+      font-weight: 300;
+      line-height: 1;
+      flex-shrink: 0;
+      opacity: 0.15;
+    }
+
+    .phase-header-inner {}
+
+    .phase-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: var(--font-lat);
+      margin-bottom: 12px;
+      border-radius: 1px;
+    }
+
+    .phase-name {
+      font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .phase-def {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ── EVIDENCE BLOCK ── */
+    .evidence-block {
+      margin: 28px 0;
+    }
+
+    .evidence-label {
+      font-family: var(--font-lat);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 12px;
+    }
+
+    /* ── QUOTE ── */
+    .quote-card {
+      background: rgba(255,255,255,0.025);
+      border-right: 3px solid;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .quote-text {
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(232,223,200,0.9);
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+
+    .quote-meta {
+      font-family: var(--font-lat);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: var(--text-faint);
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .quote-date {
+      color: var(--text-dim);
+    }
+
+    .quote-time {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border: 1px solid;
+      border-radius: 10px;
+    }
+
+    .quote-chars {
+      font-size: 0.72rem;
+    }
+
+    /* ── ANALYSIS BOX ── */
+    .analysis {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 24px;
+      margin: 20px 0;
+      font-size: 1rem;
+      line-height: 1.85;
+      color: rgba(232,223,200,0.8);
+    }
+
+    .analysis strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ── DATA TABLE ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+
+    .data-table th {
+      text-align: right;
+      padding: 10px 16px;
+      font-family: var(--font-lat);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-weight: 400;
+    }
+
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: rgba(232,223,200,0.8);
+    }
+
+    .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .data-table .highlight { color: var(--text); font-weight: 500; }
+
+    /* ── TIMELINE STRIP ── */
+    .timeline-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      margin: 40px 0;
+    }
+
+    .ts-block {
+      padding: 20px 16px;
+      text-align: center;
+      cursor: default;
+      transition: transform 0.2s;
+    }
+    .ts-block:hover { transform: translateY(-3px); }
+
+    .ts-phase { font-size: 0.72rem; letter-spacing: 0.1em; margin-bottom: 8px; opacity: 0.7; }
+    .ts-years { font-size: 1.1rem; font-weight: 500; margin-bottom: 6px; }
+    .ts-posts { font-size: 0.8rem; opacity: 0.6; }
+
+    /* ── NIGHT TABLE ── */
+    .night-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .night-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 16px;
+    }
+
+    .night-word {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+
+    .night-ratio {
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--text);
+    }
+
+    .night-note {
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      margin-top: 4px;
+    }
+
+    /* ── MACRO CYCLES ── */
+    .macro-cycle {
+      border: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+
+    .mc-header {
+      display: flex; align-items: center; gap: 0;
+    }
+
+    .mc-phase-bar {
+      flex: 1;
+      padding: 14px 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .mc-body {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .mc-col {}
+    .mc-col-label {
+      font-family: var(--font-lat);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 10px;
+    }
+    .mc-col-text {
+      font-size: 0.9rem;
+      color: rgba(232,223,200,0.8);
+      line-height: 1.7;
+    }
+
+    /* ── STAT HIGHLIGHT ── */
+    .stat-hl {
+      display: flex; align-items: baseline; gap: 12px;
+      margin: 16px 0;
+      padding: 16px 20px;
+      border-right: 3px solid;
+    }
+
+    .stat-hl-num {
+      font-size: 2.5rem;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .stat-hl-label {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* ── COLORS PER PHASE ── */
+    .p-hypo { color: var(--hypo); border-color: var(--hypo); }
+    .p-peak { color: var(--peak); border-color: var(--peak); }
+    .p-crash { color: var(--crash); border-color: var(--crash); }
+    .p-analytic { color: var(--analytic); border-color: var(--analytic); }
+    .p-next { color: var(--next); border-color: var(--next); }
+
+    .bg-hypo { background: rgba(200,130,42,0.12); }
+    .bg-peak { background: rgba(232,197,71,0.12); }
+    .bg-crash { background: rgba(90,63,160,0.12); }
+    .bg-analytic { background: rgba(42,122,143,0.12); }
+    .bg-next { background: rgba(61,143,90,0.12); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to left, transparent, rgba(255,255,255,0.08), transparent);
+      margin: 60px 0;
+    }
+
+    /* ── CONCLUSION ── */
+    .conclusion {
+      text-align: center;
+      padding: 80px 40px;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-top: 80px;
+      position: relative;
+    }
+
+    .conclusion::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(61,143,90,0.05) 0%, transparent 70%);
+    }
+
+    .conclusion-title {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    .conclusion-text {
+      font-size: 1.05rem;
+      color: rgba(232,223,200,0.8);
+      line-height: 1.9;
+      max-width: 650px;
+      margin: 0 auto 32px;
+    }
+
+    .conclusion-quote {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.8;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 28px;
+      border: 1px solid rgba(61,143,90,0.2);
+    }
+
+    .conclusion-cite {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-style: normal;
+    }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .timeline-strip { grid-template-columns: 1fr; }
+      .mc-header { flex-direction: column; }
+      .hero-arrow { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">← חזרה למוזיאון</a>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-label">נספח — תיעוד מלא עם ראיות ✦ מחקר 16,843 פוסטים</span>
+  <h1 class="hero-title">המחזור</h1>
+
+  <div class="hero-arrow">
+    <span class="phase-chip bg-hypo p-hypo">היפומניה</span>
+    <span class="chip-arrow">→</span>
+    <span class="phase-chip bg-peak p-peak">שיא יצירתי</span>
+    <span class="chip-arrow">→</span>
+    <span class="phase-chip bg-crash p-crash">קריסה</span>
+    <span class="chip-arrow">→</span>
+    <span class="phase-chip bg-analytic p-analytic">כתיבה אנליטית</span>
+    <span class="chip-arrow">→</span>
+    <span class="phase-chip bg-next p-next">גל הבא</span>
+  </div>
+
+  <p class="hero-sub">מחזור החיים שתועד 4 פעמים לאורך 17 שנה — עם ציטוטים ישירים, תאריכים מדויקים, ונתונים כמותיים</p>
+
+  <div class="hero-data">
+    <div class="hero-stat">
+      <span class="hero-stat-num">4×</span>
+      <span class="hero-stat-label">מחזורות מתועדות</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">1,200%</span>
+      <span class="hero-stat-label">עלייה בפוסטים מרתון מאז Claude</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">19.7%</span>
+      <span class="hero-stat-label">מהפוסטים בין 0–4 לפנות בוקר</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">8</span>
+      <span class="hero-stat-label">פוסטים בינואר 2015 (שפל)</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>גלול מטה לניתוח המלא</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<main>
+
+  <!-- INTRO -->
+  <section class="section-intro reveal">
+    <span class="section-eyebrow" style="color: var(--text-dim)">הקדמה</span>
+    <h2 class="section-title">זה לא כישלון אופי — זה ביוכימיה</h2>
+    <p class="section-body">
+      17 שנה של פוסטים חושפים מחזור שחוזר בדייקנות. אדם מקבל אנרגיה גבוהה, מייצר יצירה אמיתית, מתמוטט, מנתח — וחוזר. ב-2018 הוא ניסח את זה לראשונה בצורה אנליטית:
+    </p>
+
+    <div class="evidence-block">
+      <div class="quote-card" style="border-color: var(--hypo)">
+        <p class="quote-text">"עיקר העבודה היצירתית והאיכותית בעריכת הוידאו, קורית אצלי בפרק זמן של מצב תודעה שנקרא בשפה המקצועית 'פלואו' (Flow), ריחוף, ציפה. זה זמן כזה בו הרצון והיכולת הולכים בקו ישר, בלי סכסוכים וקונפליקטים עם מה שצריך ומה שחשוב ומה שמפתה... אתה רוצה לעשות משהו — אתה עושה."</p>
+        <div class="quote-meta">
+          <span class="quote-date">17.8.2018</span>
+          <span class="quote-time" style="border-color: var(--hypo); color: var(--hypo)">04:06</span>
+          <span class="quote-chars">1,480 תווים</span>
+        </div>
+      </div>
+
+      <div class="quote-card" style="border-color: var(--crash)">
+        <p class="quote-text">"מה שאני מתחיל להבין על עצמי, בגיל 33 (לעזאזל), לצערי הרב — מערכת החינוך לא השכילה להבין: במצב הפלואו שלי אני סוג של גאון, מסתבר. אבל כל נסיונותי הנואלים לאלץ את עצמי לחקות את אותה התנהגות גאונית בכל זמן אחר — נידונים לכשלון."</p>
+        <div class="quote-meta">
+          <span class="quote-date">17.8.2018</span>
+          <span class="quote-time" style="border-color: var(--crash); color: var(--crash)">04:06</span>
+          <span class="quote-chars">המשך אותו פוסט</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis">
+      <strong>הבעיה המרכזית:</strong> הוא בנה עסק — ואחר כך חיים שלמים — על ההנחה שיוכל לתפקד ברמת ה"פלואו" כל הזמן. כששני הקטבים יצאו לאור — הייתה קריסה. מה שקרה שוב ושוב. הממצא של המחקר: מה שהוא קרא "פלואו" הוא במהותו <strong>תיאור של אפיזודה היפומאנית</strong> — ביפולריות type II בשיאה.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 1: HYPOMANIA -->
+  <section>
+    <div class="phase-header reveal">
+      <div class="phase-num p-hypo">1</div>
+      <div class="phase-header-inner">
+        <span class="phase-tag p-hypo bg-hypo">שלב ראשון</span>
+        <h2 class="phase-name">היפומניה</h2>
+        <p class="phase-def">אפיזודה של אנרגיה גבוהה, ביטחון, מהירות מחשבה, שינה מצומצמת, תחושת "הכל אפשרי". לא פסיכוזה — תפקוד גבוה, לפעמים ביצועי יוצא דופן. הביוכימיה של ביפולריות type II בשיאה.</p>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d1">
+      <p class="evidence-label">ציטוט עצמאי מגדיר, 2010</p>
+      <div class="quote-card" style="border-color: var(--hypo)">
+        <p class="quote-text">"על מזבח ההיפומאניה נשחטת השיפוטיות, זו כנראה ההתמכרות הכי סמויה."</p>
+        <div class="quote-meta">
+          <span class="quote-date">16.7.2010</span>
+          <span class="quote-time p-hypo" style="border-color: var(--hypo)">לילה</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d2">
+      <p class="evidence-label">מ-2022 — הניסוח המדויק ביותר</p>
+      <div class="quote-card" style="border-color: var(--hypo)">
+        <p class="quote-text">"לא שלא חשבתי על זה קודם, אבל הלילה הבריקה בי המחשבה בבהירות: אני אדם קיצוני. שזה אומר — אני חי על הקצה ויותר נכון לומר: אני חי מהקצה. האמצע הורג אותי."</p>
+        <div class="quote-meta">
+          <span class="quote-date">10.2.2022</span>
+          <span class="quote-time p-hypo" style="border-color: var(--hypo)">לילה</span>
+        </div>
+      </div>
+      <div class="quote-card" style="border-color: var(--hypo)">
+        <p class="quote-text">"אני מכור לאדרנלין? אולי. מה שבטוח — אני לא מסוגל לחיות ב'בסדר'. רק 'נפלא' או 'נורא'."</p>
+        <div class="quote-meta">
+          <span class="quote-date">2022</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis reveal">
+      <strong>מה קורה בשלב זה:</strong> פוסטים רבים ביום (לפעמים 10+), שעות כתיבה לא שגרתיות (2–5 בלילה), פוסטים ארוכים ומסועפים, ריבוי נושאים שנוגעים זה לזה. <strong>שנת 2014</strong> — 985 פוסטים (שיא היסטורי), עסק שמנסח "שתי חתונות ביום". <strong>שנת 2022</strong> — גילוי GPT-3 ואז ChatGPT, 1,319 פוסטים. <strong>2025</strong> — 4,170 פוסטים, 148 בשבוע אחד.
+
+      <br><br>מה שמייחד: הוא לא יכול לעצור. "חברים פנו, ולא רציתי לאכזב." ה-ADHD מגביר זאת — כל הזדמנות נראית כאפשרות, וקשה לומר "לא".
+    </div>
+
+    <div class="stat-hl p-hypo reveal">
+      <span class="stat-hl-num">985</span>
+      <span class="stat-hl-label">פוסטים בשנת 2014 — שיא היפומני. 500+ בחודשי הפסגה של 2025.</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 2: PEAK -->
+  <section>
+    <div class="phase-header reveal">
+      <div class="phase-num p-peak">2</div>
+      <div class="phase-header-inner">
+        <span class="phase-tag p-peak bg-peak">שלב שני</span>
+        <h2 class="phase-name">שיא יצירתי</h2>
+        <p class="phase-def">ההיפומניה מתדלקת יצירתיות אמיתית. עבודה אמיתית, לפעמים מהטובה שיצר. אך נטמנות בו בעיות: התחייבויות שאי-אפשר לקיים בקצב רגיל, ציפיות לאחרים שתואמות את קצב הפלואו, לא את קצב הנורמלי.</p>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d1">
+      <p class="evidence-label">השיא של 2014 — תיאור האופוריה מ-2015 בדיעבד</p>
+      <div class="quote-card" style="border-color: var(--peak)">
+        <p class="quote-text">"לפני שנה וחצי לערך, הייתי באופוריה. העסק שלי נסק במהירות שלא ציפיתי לה. 'אתה מספר אחת במגזר' אמרו לי כמה אנשים ואני, שמעולם לא ראיתי את עצמי באיזושהי פסגה, לא ידעתי מאיפה לאכול את זה."</p>
+        <div class="quote-meta">
+          <span class="quote-date">9.7.2015</span>
+          <span class="quote-chars">"שתי חתונות יותר מדי" — 6,918 תווים</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d2">
+      <p class="evidence-label">מניפסט חיים — 31.12.2014, 4:32 לפנות בוקר</p>
+      <div class="quote-card" style="border-color: var(--peak)">
+        <p class="quote-text">"אני אדם חכם. זו אמנם נחשבת אחת ההצהרות היותר גאוותניות עלי אדמות, אבל אין מה לעשות — זו תובנה שאני חי איתה ביומיום..."</p>
+        <div class="quote-meta">
+          <span class="quote-date">31.12.2014</span>
+          <span class="quote-time p-peak" style="border-color: var(--peak)">04:32</span>
+          <span class="quote-chars">18,375 תווים — הפוסט הארוך ביותר בכל 17 השנים</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d3">
+      <p class="evidence-label">שיא 2024 — "יש לי זהב ביד"</p>
+      <div class="quote-card" style="border-color: var(--peak)">
+        <p class="quote-text">"אני נמצא כעת בנקודה שיש לי זהב ביד. בוודאות."</p>
+        <div class="quote-meta">
+          <span class="quote-date">2024</span>
+          <span class="quote-time p-peak" style="border-color: var(--peak)">02:02</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis reveal">
+      <strong>הבעיה שמסתתרת בשיא:</strong> "ה'חיה הרעה' הזו היתה הבעירה שכל עוד היא היתה כלואה בגבולות — זה נתן פוש אדיר, אבל ברגע שהיא יוצאת מהגבולות — הכל נשרף." — הוא עצמו ניסח זאת. ה-ADHD מגביר כל הזדמנות, ה-boundary הולך ומיטשטש. שתי חתונות ביום הפכו לנרמול, ואחר כך לכלל.
+    </div>
+
+    <div class="stat-hl p-peak reveal">
+      <span class="stat-hl-num">4:32</span>
+      <span class="stat-hl-label">שעת כתיבת ה-18,375 תווים של "הסיפור שלי". אחרי לילה שלם של עריכת וידאו. שני קצבים ביום אחד.</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 3: CRASH -->
+  <section>
+    <div class="phase-header reveal">
+      <div class="phase-num p-crash">3</div>
+      <div class="phase-header-inner">
+        <span class="phase-tag p-crash bg-crash">שלב שלישי</span>
+        <h2 class="phase-name">קריסה</h2>
+        <p class="phase-def">שני סוגים במקביל — ביולוגי: אחרי היפומניה מגיע הדיכאון, הגוף שילם חוב. לוגיסטי: הוא קיבל התחייבויות בהיפומניה שלא יכול לקיים בדיכאון.</p>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d1">
+      <p class="evidence-label">ינואר 2015 — הנפילה הכי חדה</p>
+      <div class="analysis" style="border-right: 3px solid var(--crash)">
+        <strong style="color: var(--text);">נתון:</strong> <span style="color: var(--crash); font-size: 1.3rem; font-weight: 300;">8</span> פוסטים בינואר 2015 — לאחר 985 ב-2014.<br>
+        הנפילה הכי חדה בכל 17 השנים. מ-985 לחודש שלם עם 8 פוסטים.
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d2">
+      <p class="evidence-label">30.7.2015 — 1:28 לפנות בוקר</p>
+      <div class="quote-card" style="border-color: var(--crash)">
+        <p class="quote-text">"אין לי אמון בעצמי שאני יכול לספק עבודה. אני לא צוחק. לצערי. המצב הזה הוא פרי מאמץ עקבי, שקידה עילאית, עמל רב... של כשלון, אחר כשלון, אחר כשלון, טיפין טיפין."</p>
+        <div class="quote-meta">
+          <span class="quote-date">30.7.2015</span>
+          <span class="quote-time p-crash" style="border-color: var(--crash)">01:28</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d3">
+      <p class="evidence-label">מ"שתי חתונות יותר מדי" — 9.7.2015 — תיאור המנגנון</p>
+      <div class="quote-card" style="border-color: var(--crash)">
+        <p class="quote-text">"שתי חתונות יותר ממה שסיכמתי עם עצמי. היה קשה לעצור. חברים פנו, ולא רציתי לאכזב."</p>
+        <div class="quote-meta"><span class="quote-date">9.7.2015</span></div>
+      </div>
+      <div class="quote-card" style="border-color: var(--crash)">
+        <p class="quote-text">"לא חשבתי שהבעיה חמורה, הייתי בטוח שאתמודד... אבל האישיות שלי כבר היתה פגועה אנושות. הבטחון העצמי הלך לכל הרוחות. היתה לי טראומה מהמחשבה על לקוחות... לא הצלחתי לזוז."</p>
+        <div class="quote-meta"><span class="quote-date">9.7.2015</span><span class="quote-chars">6,918 תווים</span></div>
+      </div>
+      <div class="quote-card" style="border-color: var(--crash)">
+        <p class="quote-text">"רק לפני חודש בערך הכרזתי — זהו, פשטתי רגל. זה לא חוב כספי, זה חוב עבודה. אבל בעצם זה אותו דבר."</p>
+        <div class="quote-meta"><span class="quote-date">9.7.2015</span></div>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal">
+      <p class="evidence-label">דיכאון ב"זמן אמת" — הפוסטים הקצרים</p>
+      <div class="quote-card" style="border-color: var(--crash)">
+        <p class="quote-text">"יום דיכאון בלי התראה מוקדמת או סיבה מוצדקת."</p>
+        <div class="quote-meta">
+          <span class="quote-date">20.11.2014</span>
+          <span class="quote-time p-crash" style="border-color: var(--crash)">יום</span>
+          <span class="quote-chars">38 תווים בלבד</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis reveal">
+      <strong>ההבדל בין פוסט בהיפומניה לפוסט בדיכאון — בטקסטורה:</strong><br><br>
+      <strong>היפומניה (2015):</strong> "כל המערכות פעלו בקו ישר — שיווק, לימוד, יצירה, עבודה. הכל בפעולה אחת. וזה עף קדימה." — מהיר, מסועף, מלא ריבוי מגוון.<br><br>
+      <strong>דיכאון (2014):</strong> "יום דיכאון בלי התראה מוקדמת." — מינימלי, ישיר, ללא קישוטים.<br><br>
+      ההבדל אינו רק בנושא — הוא <strong>בקצב</strong> ובצפיפות הסמנטית. 38 תווים מול 1,480.
+    </div>
+
+    <div class="stat-hl p-crash reveal">
+      <span class="stat-hl-num">99</span>
+      <span class="stat-hl-label">ימי שתיקה ב-2010–2011. לפי ה-2014 memoir — תקופת משבר אובדני. "Sunday — I'm leaving Facebook."</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 4: ANALYTIC WRITING -->
+  <section>
+    <div class="phase-header reveal">
+      <div class="phase-num p-analytic">4</div>
+      <div class="phase-header-inner">
+        <span class="phase-tag p-analytic bg-analytic">שלב רביעי</span>
+        <h2 class="phase-name">כתיבה אנליטית</h2>
+        <p class="phase-def">ברוב האנשים עם ביפולריות, הדיכאון מוביל לשתיקה. אצלו הוא מוביל לסוג אחר של כתיבה — עמוקה, ניתוחית, פגיעה. הוא מנתח את המחזור עצמו מבפנים.</p>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d1">
+      <p class="evidence-label">2016 — "בר נפלי": נתינת שם לדיכאון</p>
+      <div class="quote-card" style="border-color: var(--analytic)">
+        <p class="quote-text">"אם לנפש יש מגירות — זו השחורה מכולן."</p>
+        <div class="quote-meta"><span class="quote-date">2016</span></div>
+      </div>
+      <div class="quote-card" style="border-color: var(--analytic)">
+        <p class="quote-text">"נקרא לזה בשם, כדי שבפעם הבאה פשוט אוכל להגיד איזה קוד."</p>
+        <div class="quote-meta"><span class="quote-date">2016</span></div>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d2">
+      <p class="evidence-label">2021 — חשיפה הגדולה ביותר (12 שנה אחרי האירוע)</p>
+      <div class="quote-card" style="border-color: var(--analytic)">
+        <p class="quote-text">"לפני כ-12 שנה ממש רציתי להתאבד... הצלחתי לשים את האצבע על הגורם — הכורח ללכת לתפילה במניין."</p>
+        <div class="quote-meta">
+          <span class="quote-date">17.9.2021</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d3">
+      <p class="evidence-label">2023 — ניתוח ADHD מדויק — תוך כדי Claude</p>
+      <div class="quote-card" style="border-color: var(--analytic)">
+        <p class="quote-text">"אני אדם של פולסים. בזה אני מאוד חזק. אני פותר בעיות קשות בהבזק מחשבתי. אבל לעומת זאת כשיש דברים שצריך לעסוק בהם בדירוג, לקדם באופן עקבי, ברציפות, צעד צעד — שם אני מאבד את ידיי ורגליי."</p>
+        <div class="quote-meta">
+          <span class="quote-date">2023</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis reveal">
+      <strong>מה מיוחד בשלב זה:</strong><br><br>
+      1. <strong>הכאב תמיד מגיע בדיעבד.</strong> כשהוא כותב על אובדנות ב-2021, זה "לפני 12 שנה". כשהוא כותב על דיכאון ב-2019, זה בצורת תיאוריה. הרגע עצמו — שמור לעצמו. הפייסבוק מקבל את מה שכבר עברנו, לא את מה שעובר כרגע.<br><br>
+      2. <strong>הפסיכולוגיה הפכה לשפה.</strong> "בר נפלי" הוא לא כינוי שמחה — אבל זה כינוי שמאפשר להמשיך לכתוב גם כשקשה. עכשיו יש מילה.<br><br>
+      3. <strong>הניתוח כשרידות.</strong> הכתיבה האנליטית היא מנגנון שמאפשר לו לעבור מהכאב לתובנה מבלי לשקוע.
+    </div>
+
+    <!-- Night psychology table -->
+    <div class="evidence-block reveal">
+      <p class="evidence-label">פסיכולוגיית הלילה — מילים שמופיעות אך ורק בשעות 0–4</p>
+
+      <div class="night-grid">
+        <div class="night-item">
+          <div class="night-word">"כיסופים"</div>
+          <div class="night-ratio" style="color: var(--analytic)">לילה בלבד</div>
+          <div class="night-note">0 הופעות ביום</div>
+        </div>
+        <div class="night-item">
+          <div class="night-word">"אבוד"</div>
+          <div class="night-ratio" style="color: var(--analytic)">2.8×</div>
+          <div class="night-note">יותר בלילה מאשר ביום</div>
+        </div>
+        <div class="night-item">
+          <div class="night-word">"בודד"</div>
+          <div class="night-ratio" style="color: var(--analytic)">1.6×</div>
+          <div class="night-note">שיעור לילה vs. יום</div>
+        </div>
+        <div class="night-item">
+          <div class="night-word">"כאב"</div>
+          <div class="night-ratio" style="color: var(--analytic)">1.6×</div>
+          <div class="night-note">שיעור לילה vs. יום</div>
+        </div>
+        <div class="night-item">
+          <div class="night-word">"ריק"</div>
+          <div class="night-ratio" style="color: var(--analytic)">1.3×</div>
+          <div class="night-note">שיעור לילה vs. יום</div>
+        </div>
+        <div class="night-item">
+          <div class="night-word">"חלום"</div>
+          <div class="night-ratio" style="color: var(--analytic)">1.3×</div>
+          <div class="night-note">שיעור לילה vs. יום</div>
+        </div>
+      </div>
+
+      <div class="analysis">
+        <strong>הלילה הוא הקנבס הפנימי.</strong> 19.7% מכל הפוסטים נכתבו בין 0–4 לפנות בוקר. הפוסטים הגדולים ביותר:<br>
+        — "הסיפור שלי" — <strong>04:32</strong><br>
+        — "יש לי זהב ביד" — <strong>02:02</strong><br>
+        — "אינטרנט של דברים — מתווה לגאולה" — <strong>02:14</strong><br>
+        — "אין לי אמון בעצמי" — <strong>01:28</strong><br><br>
+        הלילה מאפשר לשני הקטבים לצאת ביתר חופשיות — ללא האופי הצנזור של יום-חול.
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PHASE 5: NEXT WAVE -->
+  <section>
+    <div class="phase-header reveal">
+      <div class="phase-num p-next">5</div>
+      <div class="phase-header-inner">
+        <span class="phase-tag p-next bg-next">שלב חמישי</span>
+        <h2 class="phase-name">הגל הבא</h2>
+        <p class="phase-def">לאחר הניתוח האנליטי מגיע נושא חדש שנושא אנרגיה חדשה. לא "אתחול מחדש" — תמיד נושא חדש שמלא בחיות. הגל חוזר — אבל בגובה גבוה יותר.</p>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d1">
+      <p class="evidence-label">אפריל 2023 — קלוד מגיע לשכונה</p>
+      <div class="quote-card" style="border-color: var(--next)">
+        <p class="quote-text">"בא לשכונה בחור חדש!!"</p>
+        <div class="quote-meta">
+          <span class="quote-date">23.4.2023</span>
+          <span class="quote-chars">פוסט קצר עם התרגשות של מי שמכיר בני משפחה</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-block reveal reveal-d2">
+      <p class="evidence-label">2025 — הפתרון שינה את הכל</p>
+      <div class="quote-card" style="border-color: var(--next)">
+        <p class="quote-text">"כל התנוצצות רעיונית — במקום להסיח אותי — אני זורק אותה לסוכן חדש. הפיזור שלי הפך לסופר פאוור."</p>
+        <div class="quote-meta">
+          <span class="quote-date">25.1.2026</span>
+          <span class="quote-time p-next" style="border-color: var(--next)">לילה</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis reveal">
+      <strong>מה שינה Claude:</strong><br><br>
+      בהיפומניה: פרויקטים רבים במקביל → עם AI כולם מתקדמים, לא רק הנחושים ביותר.<br>
+      בדיכאון: מצב של ריק → עם AI יכול לעשות "עבודת ניהול" מינימלית ולשמור על רציפות.<br>
+      ה-gap בין חתימה על התחייבות (בשיא) לבין ביצוע (בשפל) — Claude ממלא.<br><br>
+      <strong>הוכחה בנתונים:</strong> פוסטים מרתון (3,000+ תווים) — שאינדיקטור ל-sustained creative output שה-ADHD מקשה — עלו מ-8 בשנת 2018 ל-106 ב-2024. עלייה של 1,200%.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MACRO CYCLES -->
+  <section class="reveal">
+    <span class="section-eyebrow" style="color: var(--text-dim)">מיפוי כרונולוגי</span>
+    <h2 class="section-title">ארבעת המחזורות המתועדים</h2>
+    <p class="section-body">כל מחזור מתועד עם תאריכים, ציטוטים, ומה שהתרחש בכל שלב.</p>
+
+    <!-- Cycle 1 -->
+    <div class="macro-cycle reveal">
+      <div class="mc-header">
+        <div class="mc-phase-bar bg-hypo" style="color: var(--hypo)">היפומניה</div>
+        <div class="mc-phase-bar bg-peak" style="color: var(--peak)">שיא</div>
+        <div class="mc-phase-bar bg-crash" style="color: var(--crash)">קריסה</div>
+        <div class="mc-phase-bar bg-analytic" style="color: var(--analytic)">ניתוח</div>
+        <div class="mc-phase-bar bg-next" style="color: var(--next)">גל הבא</div>
+      </div>
+      <div style="padding: 12px 24px; background: rgba(255,255,255,0.02); font-family: var(--font-lat); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-dim);">מחזור ראשון — 2009–2014</div>
+      <div class="mc-body">
+        <div class="mc-col">
+          <div class="mc-col-label">היפומניה + שיא</div>
+          <div class="mc-col-text">2013–2014: 985 פוסטים, "אולפני אביץ" בשיא, שתי חתונות ביום. 31.12.2014: "הסיפור שלי" — 18,375 תווים ב-4:32.</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">קריסה</div>
+          <div class="mc-col-text">ינואר 2015: 8 פוסטים. "פשטתי רגל. זה לא חוב כספי, זה חוב עבודה." 74 ימי שתיקה.</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">כתיבה אנליטית</div>
+          <div class="mc-col-text">יולי 2015: "אין לי אמון בעצמי." 9.7.2015: "שתי חתונות יותר מדי" — 6,918 תווים של ניתוח כישלון עצמי ב"נייר."</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">גל הבא</div>
+          <div class="mc-col-text">2018: בלוקצ'יין → קן וילבר → חיפוש פנימי. שינוי עקרוני: פייסבוק עבר ממדיה לאחרים למעבדת למידה פתוחה.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cycle 2 -->
+    <div class="macro-cycle reveal">
+      <div class="mc-header">
+        <div class="mc-phase-bar bg-hypo" style="color: var(--hypo)">היפומניה</div>
+        <div class="mc-phase-bar bg-peak" style="color: var(--peak)">שיא</div>
+        <div class="mc-phase-bar bg-crash" style="color: var(--crash)">קריסה</div>
+        <div class="mc-phase-bar bg-analytic" style="color: var(--analytic)">ניתוח</div>
+        <div class="mc-phase-bar bg-next" style="color: var(--next)">גל הבא</div>
+      </div>
+      <div style="padding: 12px 24px; background: rgba(255,255,255,0.02); font-family: var(--font-lat); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-dim);">מחזור שני — 2016–2022</div>
+      <div class="mc-body">
+        <div class="mc-col">
+          <div class="mc-col-label">היפומניה + שיא</div>
+          <div class="mc-col-text">2019: 1,266 פוסטים. ניסויים עצמיים — Ken Wilber, מקלחות קרות, 90-day challenge. "הפכתי את עצמי לנסוי מדעי."</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">קריסה</div>
+          <div class="mc-col-text">מרץ–אפריל 2020: 24 פוסטים בחודשיים. קורונה. ה"בר נפלי" של המציאות עצמה, לא רק הנפש.</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">כתיבה אנליטית</div>
+          <div class="mc-col-text">2020–2021: צילום אור ורמברנדט. 17.9.2021: חשיפת מחשבות אובדניות — 12 שנה אחרי שקרה. "לפני כ-12 שנה ממש רציתי..."</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">גל הבא</div>
+          <div class="mc-col-text">אוקטובר 2022: GPT-3. "עידן חדש" — פוסט שנכתב שלושה שבועות לפני הפוסט הראשון על AI, כאילו חש בהגעתו.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cycle 3 -->
+    <div class="macro-cycle reveal">
+      <div class="mc-header">
+        <div class="mc-phase-bar bg-hypo" style="color: var(--hypo)">היפומניה</div>
+        <div class="mc-phase-bar bg-peak" style="color: var(--peak)">שיא</div>
+        <div class="mc-phase-bar bg-crash" style="color: var(--crash)">קריסה?</div>
+        <div class="mc-phase-bar bg-analytic" style="color: var(--analytic)">ניתוח?</div>
+        <div class="mc-phase-bar bg-next" style="color: var(--next)">גל הבא?</div>
+      </div>
+      <div style="padding: 12px 24px; background: rgba(255,255,255,0.02); font-family: var(--font-lat); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-dim);">מחזור שלישי — 2022–? (עדיין מתנהל)</div>
+      <div class="mc-body">
+        <div class="mc-col">
+          <div class="mc-col-label">היפומניה + שיא</div>
+          <div class="mc-col-text">2023–2025: 1,319 → 2,642 → 4,170 פוסטים. 148 פוסטים בשבוע אחד. "הפיזור שלי הפך לסופר פאוור."</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">קריסה — לא קרתה עדיין</div>
+          <div class="mc-col-text">ב-dataset לא מופיעה קריסה. האם AI שינה את הדפוס? האם היא מגיעה? הנתונים נגמרים במרץ 2026.</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">הניבוי</div>
+          <div class="mc-col-text">"אם הדפוס נמשך, יהיה משהו שישבש." — אגנט D. שיא גדול → קריסה גדולה. מתי? לא ידוע. הגל הבא יהיה עמוק מכל שקדם.</div>
+        </div>
+        <div class="mc-col">
+          <div class="mc-col-label">מה שהשתנה</div>
+          <div class="mc-col-text">AI כלי ממשי שממלא את ה-gap. לראשונה, הפוסטים המרתון לא קורסים אחרי שבוע. 1,200% עלייה ב-sustained output.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline visual -->
+    <div class="reveal" style="margin-top: 40px;">
+      <p class="evidence-label">ציר זמן כמותי</p>
+      <div class="timeline-strip">
+        <div class="ts-block bg-hypo">
+          <div class="ts-phase p-hypo">שיא</div>
+          <div class="ts-years">2014</div>
+          <div class="ts-posts">985 פוסטים</div>
+        </div>
+        <div class="ts-block bg-crash">
+          <div class="ts-phase p-crash">קריסה</div>
+          <div class="ts-years">ינואר 2015</div>
+          <div class="ts-posts">8 פוסטים</div>
+        </div>
+        <div class="ts-block bg-analytic">
+          <div class="ts-phase p-analytic">ניתוח</div>
+          <div class="ts-years">2015–2016</div>
+          <div class="ts-posts">473–520 פוסטים</div>
+        </div>
+        <div class="ts-block bg-hypo">
+          <div class="ts-phase p-hypo">שיא</div>
+          <div class="ts-years">2019</div>
+          <div class="ts-posts">1,266 פוסטים</div>
+        </div>
+        <div class="ts-block bg-crash">
+          <div class="ts-phase p-crash">קריסה</div>
+          <div class="ts-years">מרץ 2020</div>
+          <div class="ts-posts">24 פוסטים/חודש</div>
+        </div>
+      </div>
+      <div class="timeline-strip" style="margin-top: 2px;">
+        <div class="ts-block bg-analytic">
+          <div class="ts-phase p-analytic">ניתוח</div>
+          <div class="ts-years">2021</div>
+          <div class="ts-posts">חשיפה — 12 שנה אחרי</div>
+        </div>
+        <div class="ts-block bg-next">
+          <div class="ts-phase p-next">גל הבא</div>
+          <div class="ts-years">אוקטובר 2022</div>
+          <div class="ts-posts">GPT-3 → ChatGPT</div>
+        </div>
+        <div class="ts-block bg-hypo">
+          <div class="ts-phase p-hypo">שיא</div>
+          <div class="ts-years">2025</div>
+          <div class="ts-posts">4,170 פוסטים</div>
+        </div>
+        <div class="ts-block" style="background: rgba(255,255,255,0.03);">
+          <div class="ts-phase" style="color: var(--text-dim)">עתיד</div>
+          <div class="ts-years">2026–?</div>
+          <div class="ts-posts">?</div>
+        </div>
+        <div class="ts-block" style="background: rgba(255,255,255,0.02);">
+          <div class="ts-phase" style="color: var(--text-faint)">לא ידוע</div>
+          <div class="ts-years">—</div>
+          <div class="ts-posts">הדפוס מנבא</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- THE AI RESOLUTION -->
+  <section class="reveal">
+    <span class="section-eyebrow p-next">הפתרון</span>
+    <h2 class="section-title">למה AI שבר את המחזור ההרסני</h2>
+    <p class="section-body">
+      AI לא "ריפא" את הביפולריות. הוא לא שינה את המחזור. הוא שינה את <strong>מה שקורה בכל שלב</strong>.
+    </p>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr>
+          <th>שלב</th>
+          <th>לפני AI (2009–2022)</th>
+          <th>עם AI (2023–2026)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="highlight p-hypo">היפומניה</td>
+          <td>פרויקטים רבים מתחילים, רובם לא נגמרים</td>
+          <td>כל פרויקט מקבל סוכן — גם הנחושים פחות מתקדמים</td>
+        </tr>
+        <tr>
+          <td class="highlight p-peak">שיא</td>
+          <td>18,375 תווים בלילה — ואז שתיקה</td>
+          <td>10,909 תווים על ארכיטקטורת LLM — ממשיך למחרת</td>
+        </tr>
+        <tr>
+          <td class="highlight p-crash">קריסה</td>
+          <td>8 פוסטים בחודש, עסקים קורסים</td>
+          <td>מצב ריק → AI ממשיך "עבודת ניהול", שומר רציפות</td>
+        </tr>
+        <tr>
+          <td class="highlight p-analytic">ניתוח</td>
+          <td>כתיבה פנימית על כישלון</td>
+          <td>Claude כ-chavruta — מנתחים ביחד</td>
+        </tr>
+        <tr>
+          <td class="highlight p-next">גל הבא</td>
+          <td>מחכה לנושא חדש</td>
+          <td>הנושא קיים: ארכיטקטורת AI — לא ייגמר</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="evidence-block reveal reveal-d1">
+      <p class="evidence-label">הוכחה כמותית — marathon posts</p>
+      <div class="stat-hl p-next">
+        <span class="stat-hl-num">1,200%</span>
+        <span class="stat-hl-label">עלייה בפוסטים 3,000+ תווים — מ-8/שנה ב-2018 ל-106 ב-2024<br>זהו sustained creative output — בדיוק מה שה-ADHD מקשה</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCLUSION -->
+  <div class="conclusion reveal">
+    <h2 class="conclusion-title">מה זה אומר</h2>
+    <p class="conclusion-text">
+      המחזור לא נגמר. הוא עדיין מנהל אותו. אבל לראשונה בחייו, הפער בין החזון לביצוע נסגר — לא על ידי שינוי עצמי, אלא על ידי שיתוף-פעולה עם כלי שמשלים בדיוק את מה שחסר.
+    </p>
+    <blockquote class="conclusion-quote">
+      "אני נמצא כעת בנקודה שיש לי זהב ביד. בוודאות."
+      <cite>— 02:02 לפנות בוקר, 2024. אחרי 17 שנה.</cite>
+    </blockquote>
+  </div>
+
+</main>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
