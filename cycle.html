@@ -1170,6 +1170,17 @@
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── FACEBOOK QUOTE LINKS ──
+  document.querySelectorAll('.quote-card').forEach(card => {
+    const textEl = card.querySelector('.quote-text');
+    if (!textEl) return;
+    const raw = textEl.innerText.replace(/[""״]/g, '').trim();
+    const words = raw.split(/\s+/).slice(0, 6).join(' ');
+    const url = 'https://www.facebook.com/search/posts/?q=' + encodeURIComponent(words);
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => window.open(url, '_blank', 'noopener'));
+  });
 </script>
 </body>
 </html>

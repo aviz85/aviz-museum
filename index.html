@@ -1653,6 +1653,17 @@
       glow.style.left = e.clientX + 'px';
       glow.style.top  = e.clientY + 'px';
     });
+
+    // ── FACEBOOK QUOTE LINKS ──
+    document.querySelectorAll('.diary-card').forEach(card => {
+      const textEl = card.querySelector('.diary-text');
+      if (!textEl) return;
+      const raw = textEl.innerText.replace(/[""״]/g, '').trim();
+      const words = raw.split(/\s+/).slice(0, 6).join(' ');
+      const url = 'https://www.facebook.com/search/posts/?q=' + encodeURIComponent(words);
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => window.open(url, '_blank', 'noopener'));
+    });
   </script>
 </body>
 </html>
