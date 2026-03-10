@@ -1015,10 +1015,27 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+  // ── KNOWN FACEBOOK PERMALINKS ──
+  const KNOWN_LINKS = {
+    'אפליקציה מפרומפט WizardCoder קוד': 'https://www.facebook.com/AYMaeir/posts/pfbid06t2hHG2RMckatdSsc49S1PsWP7ZncrvaeL1JN3V2TjvKp8ztXR4kowrf44tLjGAul',
+    'ריילי בראון קוד חוויה יצירתית אינטואיטיבית': 'https://www.facebook.com/AYMaeir/posts/pfbid0cigYawJwEGxuzAh2ahUXw1GZ7mDVBpr8ZoARJQb8ug3mEQ9Z8qSdZ8p4LJCnm4bQl',
+    'מהפכת הקוד ידועה למעטים ריילי קלוד': 'https://www.facebook.com/AYMaeir/posts/pfbid02DA8neVmmGZm1zxcQdKDsfrGpWfiPmXifXor8ViguDJEyetewJuXhDWDV83nibMxfl',
+    'זהב טהור ריילי בראון קוד קלוד אובססיבי': 'https://www.facebook.com/AYMaeir/posts/pfbid0H5BeQJQUctVY58CfYBLUYmko1DcxaZQhR7HRywSpgKXyQMN6fS3izNyZBmvHiSEal',
+    'מהפכת הקוד AI מי נגד מי Bolt Cursor Windsurf': 'https://www.facebook.com/AYMaeir/posts/pfbid0YNWugydKd7m5SEapV6DGzoiBQqtyt83CGBde9ESzReThpN1WETUkwmaC2m93CfV3l',
+    'מתכנתים לפתח קוד בלי לכתוב קוד vibe coding ריילי': 'https://www.facebook.com/AYMaeir/posts/pfbid0HBr1KRodQmVbvYRjh4VZuLj6FgUKQ8Em4eb1Qvgq9eqWK3pi3dfDWAtkHyL8wjfhl',
+    'קלוד 3.7 פינג פונג קורסור Claude Code': 'https://www.facebook.com/AYMaeir/posts/pfbid0216KKdoRxGxBAtX56pnnduNZxBJNiUaQo2cdXXqfByksSCR8pTxYndpb1acV2zvmRl',
+    'לפני קרפאתי Vibe Coding פימפמתי מהפכת הקוד': 'https://www.facebook.com/AYMaeir/posts/pfbid02itfvWpnu9xGjUbfoVNVw8DPEVSm1LLscfkFppNKJiQx7ZH3aUPdzoHd2se7GL8uil',
+    'לגזור לשמור קרפאתי וייב קודינג הביטוי': 'https://www.facebook.com/AYMaeir/posts/pfbid063Kd7dmqTnb93A58gStfQEmQSMaWUcNnwcAb7Ha7YS5xzSsFw876KbDwQkBYKYV1l',
+  };
+
   // ── FACEBOOK SEARCH OPENER ──
   const AUTHOR_ME_FILTER = 'eyJycF9hdXRob3I6MCI6IntcIm5hbWVcIjpcImF1dGhvcl9tZVwiLFwiYXJnc1wiOlwiXCJ9In0%3D';
 
   function openFB(query) {
+    if (KNOWN_LINKS[query]) {
+      window.open(KNOWN_LINKS[query], '_blank', 'noopener');
+      return;
+    }
     const encoded = encodeURIComponent(query);
     const url = `https://www.facebook.com/search/top?q=${encoded}&filters=${AUTHOR_ME_FILTER}`;
     window.open(url, '_blank', 'noopener');
